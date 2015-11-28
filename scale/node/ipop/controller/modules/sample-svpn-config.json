@@ -1,0 +1,54 @@
+{
+    "CFx": {
+        "xmpp_username": "",
+        "xmpp_password": "",
+        "ip4_mask": 24,
+        "xmpp_host": "",
+        "stat_report": true,
+        "tincan_logging": 0,
+        "vpn_type": "SocialVPN"
+    },
+    "TincanListener" : {
+        "socket_read_wait_time": 15,
+        "dependencies": ["Logger", "TincanDispatcher"]
+    },
+    "Logger": {
+        "controller_logging": "ERROR"
+    },
+    "TincanDispatcher": {
+        "dependencies": ["Logger"]
+    },
+    "TincanSender": {
+        "dependencies": ["Logger"]
+    },
+    "Monitor": {
+        "trigger_con_wait_time": 120,
+        "dependencies": ["Logger"]
+    },
+    "BaseTopologyManager": {
+        "link_trimmer_wait_time": 30,
+        "on-demand_connection": false,
+        "on-demand_inactive_timeout": 600,
+        "multihop": false,
+        "sec": true,
+        "timer_interval": 15,
+        "dependencies": ["Logger"]
+    },
+    "LinkManager": {
+        "dependencies": ["Logger"]
+    },
+    "AddressMapper": {
+        "ip4": "172.31.0.100",
+        "dependencies": ["Logger"]
+    },
+    "Watchdog": {
+        "timer_interval": 10,
+        "dependencies": ["Logger"]
+    },
+    "StatReport": {
+        "stat_report": false,
+        "stat_server": "metrics.ipop-project.org",
+        "stat_server_port": 5000,
+        "timer_interval": 200
+    }
+}

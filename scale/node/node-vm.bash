@@ -33,18 +33,6 @@ LXC_IPOP_SCRIPT='/home/ubuntu/ipop/ipop.bash'
 case $1 in
 
     ("install")
-        ### install LXC
-        # install LXC package
-        sudo apt-get update
-        sudo apt-get -y install lxc
-
-        # create default container
-        sudo lxc-create -n default -t ubuntu
-
-        # install additional packages (python and psmisc); allow tap device
-        sudo chroot /var/lib/lxc/default/rootfs apt-get update
-        sudo chroot /var/lib/lxc/default/rootfs apt-get install -y python psmisc iperf
-        echo 'lxc.cgroup.devices.allow = c 10:200 rwm' | sudo tee --append $DEFAULT_LXC_CONFIG
 
         ### install ejabberd
         # install ejabberd package
@@ -52,10 +40,11 @@ case $1 in
         sudo apt-get -y install ejabberd
 
         # prepare ejabberd server config file
-        sudo cp $NODE_EJABBERD_CONFIG $EJABBERD_CONFIG
+        sudo cp "./config/ejabberd.cfg" "/etc/ejabberd/ejabberd.cfg"
 
         # restart ejabberd service
-        sudo systemctl restart ejabberd.service
+        # sudo systemctl restart ejabberd.service
+        sudo service ejabberd restart
         sudo ejabberdctl restart
 
         # wait for ejabberd service to start
@@ -64,7 +53,7 @@ case $1 in
         # create admin user
         sudo ejabberdctl register admin ejabberd password
 
-        ''
+        ;;
     ("init-containers")
         min=$2
         max=$3
@@ -179,7 +168,7 @@ case $1 in
 
             threshold_on_demand=${16}
 
-            ssh -n "node$i" -- bash -c "bash ipop-vm.bash config $xmpp_username $xmpp_password $xmpp_host $stun '$turn' $ipv4 $ipv4_mask $central_visualizer $central_visualizer_ipv4 $central_visualizer_port $num_successors $num_chords $num_on_demand $num_inbound $ttl_link_initial $ttl_link_pulse $ttl_chord $ttl_on_demand $threshold_on_demand" &
+            sudo lxc-attach -n "node$i" -- bash -c "bash $LXC_IPOP_SCRIPT config $xmpp_username $xmpp_password $xmpp_host $stun '$turn' $ipv4 $ipv4_mask $central_visualizer $central_visualizer_ipv4 $central_visualizer_port $num_successors $num_chords $num_on_demand $num_inbound $ttl_link_initial $ttl_link_pulse $ttl_chord $ttl_on_demand $threshold_on_demand" &
         done
         wait
         ;;
