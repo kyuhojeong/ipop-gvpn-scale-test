@@ -99,7 +99,7 @@ listen:
     ## certificate, specify the full path to the
     ## file and uncomment this line:
     ##
-    certfile: "/etc/ejabberd/ejabberd.pem"
+    certfile: "/opt/ejabberd-15.11/conf/server.pem"
     starttls: true
     ##
     ## Custom OpenSSL options
@@ -165,7 +165,7 @@ s2s_use_starttls: optional
 ##
 ## s2s_certfile: Specify a certificate file.
 ##
-s2s_certfile: "/etc/ejabberd/ejabberd.pem"
+s2s_certfile: "/opt/ejabberd-15.11/conf/server.pem"
 
 ## Custom OpenSSL options
 ##
